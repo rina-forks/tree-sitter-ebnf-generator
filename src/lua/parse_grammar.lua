@@ -931,12 +931,12 @@ for _, v in ipairs(tokens) do
   local tree_sitter_body = {}
   local parsed = parse_body(id, replaced)
   local base_indent = in_rules and "    " or "  "
-  local def = { base_indent .. id .. ": $ => " }
+  local def = { base_indent .. id .. ": $ =>\n" .. base_indent .. "  " }
   for line in parsed:gmatch("([^\n]*)") do table.insert(tree_sitter_body, line) end
   if #tree_sitter_body == 1 then
     table.insert(def, table.remove(tree_sitter_body))
   else
-    local indent = def[1]:gsub(".", " ")
+    local indent = base_indent .. "  "
     for i, line in ipairs(tree_sitter_body) do
       local new_indent = i > 1 and indent or ""
       table.insert(def, new_indent .. line)
