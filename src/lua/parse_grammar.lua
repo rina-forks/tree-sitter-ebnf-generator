@@ -526,7 +526,7 @@ local function print_node(n, offset, max_width)
 
     if n.kind == SEQUENCE or n.kind == ROOT then
       local len = #n.children
-      if len == 0 then error("empty sequence") end
+      -- if len == 0 then error("empty sequence") end
       return write_function_with_args("seq", n)
     elseif n.kind == LITERAL then
       return n.children[1], #n.children[1] > max_width
@@ -581,8 +581,8 @@ local function flatten(n, string)
     if n.kind == SEQUENCE or n.kind == ROOT then
       local seq = result
       local len = #n.children
-      if len == 0 then error("empty sequence in " .. tostring(string)) end
-      if len > 1 then
+      -- if len == 0 then error("empty sequence in " .. tostring(string)) end
+      if len == 0 or len > 1 then
         if n.kind == SEQUENCE then
           seq = new_node(SEQUENCE)
           table.insert(result.children, seq)
@@ -859,9 +859,9 @@ local function parse_body(id, string)
       end
     elseif b == PIPE and (state == NONE or state == IN_GROUP or state == IN_CHOICE) then
       local seq = node.children
-      if #seq == 0 then
-        source_error("must have element to left of choice", source_info)
-      end
+      -- if #seq == 0 then
+      --   source_error("must have element to left of choice", source_info)
+      -- end
       local choice_node = new_node(SEQUENCE)
       table.insert(state_stack, IN_CHOICE)
       table.insert(node_stack, choice_node)
